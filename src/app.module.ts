@@ -6,9 +6,22 @@ import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
 import { PipesModule } from './pipes/pipes.module';
 import { PipeTasksModule } from './pipe-tasks/pipe-tasks.module';
+import { ConfigModule } from './config/config.module';
+import { ConfigService} from "./config/config.service";
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost/nest'), TasksModule, UsersModule, PipesModule, PipeTasksModule],
+  imports: [
+    // MongooseModule.forRoot('mongodb://localhost/cpt'),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useExisting: ConfigService,
+    }),
+    TasksModule,
+    UsersModule,
+    PipesModule,
+    PipeTasksModule,
+    ConfigModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
