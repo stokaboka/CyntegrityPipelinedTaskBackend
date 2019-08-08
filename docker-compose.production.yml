@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1234567890
+
+  laweb:
+    build: .
+    image: cpt
+    restart: "no"
+    environment:
+      - NODE_ENV=production
+      - WEB_CONCURRENCY=2
+    ports:
+      - "5555:5555"
+    depends_on:
+      - mongo
