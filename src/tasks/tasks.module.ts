@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TasksService } from './tasks.service';
 import { TasksController } from './tasks.controller';
-import { UsersSchema } from './schemas/users.schema';
+import { UsersSchema } from '../users/users.schema';
 import { TasksSchema } from './schemas/tasks.schema';
 import { PipesSchema } from './schemas/pipes.schema';
 import { PipeTasksSchema } from './schemas/pipeTasks.schema';

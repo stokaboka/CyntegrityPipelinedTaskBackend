@@ -1,4 +1,4 @@
-export class Tasks {
+export class TasksDto {
   readonly id: number;
   readonly userId: number;
   readonly name: string;
