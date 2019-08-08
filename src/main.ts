@@ -3,10 +3,39 @@
  */
 
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+
+  const app = await NestFactory.create<NestExpressApplication>(
+      AppModule,
+  );
+
+  const apiVersionNumber = app.get('ConfigService').apiVersion;
+  app.setGlobalPrefix(`api/v${apiVersionNumber}`);
+
+  const publicPath = app.get('ConfigService').publicPath;
+  // tslint:disable-next-line:no-console
+  console.log('publicPath', publicPath);
+  app.useStaticAssets(publicPath);
+
+  app.enableCors({
+    origin: '*',
+    allowedHeaders: 'Content-Type,Authorization,Accept',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  });
+
+  const port = app.get('ConfigService').port || 3000;
+  const host = app.get('ConfigService').host || '0.0.0.0';
+
+  try {
+    await app.listen(port, host);
+    // tslint:disable-next-line:no-console
+    console.log('Server started:', `${host}:${port}`);
+  } catch (e) {
+    // tslint:disable-next-line:no-console
+    console.log('Server failed:', e.message);
+  }
 }
 bootstrap();

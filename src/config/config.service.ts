@@ -30,7 +30,7 @@ export class ConfigService implements MongooseOptionsFactory {
                 .valid(['development', 'production', 'test', 'provision'])
                 .default('development'),
             API_VERSION: Joi.number().default(1),
-            SERVER_PORT: Joi.number().default(4444),
+            SERVER_PORT: Joi.number().default(5555),
             SERVER_HOST: Joi.string().default('0.0.0.0'),
             PUBLIC_PATH: Joi.string().default(''),
             DB_URI: Joi.string().default('mongodb://localhost/cpt'),
@@ -56,4 +56,19 @@ export class ConfigService implements MongooseOptionsFactory {
         return out;
     }
 
+    get apiVersion(): number {
+        return Number(this.envConfig.API_VERSION);
+    }
+
+    get port(): number {
+        return Number(this.envConfig.SERVER_PORT);
+    }
+
+    get host(): string {
+        return String(this.envConfig.SERVER_HOST);
+    }
+
+    get publicPath(): string {
+        return path.join('public');
+    }
 }
