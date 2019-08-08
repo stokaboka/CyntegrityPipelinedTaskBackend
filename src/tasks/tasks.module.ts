@@ -4,7 +4,6 @@ import { TasksService } from './tasks.service';
 import { TasksController } from './tasks.controller';
 import { UsersSchema } from '../users/users.schema';
 import { TasksSchema } from './schemas/tasks.schema';
-import { PipesSchema } from './schemas/pipes.schema';
 import { PipeTasksSchema } from './schemas/pipeTasks.schema';
 
 @Module({
@@ -12,7 +11,6 @@ import { PipeTasksSchema } from './schemas/pipeTasks.schema';
     MongooseModule.forFeature([
       { name: 'Users', schema: UsersSchema },
       { name: 'Tasks', schema: TasksSchema },
-      { name: 'Pipes', schema: PipesSchema },
       { name: 'PipeTasks', schema: PipeTasksSchema },
     ]),
   ],
