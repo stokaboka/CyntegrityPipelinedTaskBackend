@@ -3,8 +3,8 @@
  */
 
 export class PipeTasksDto {
-  readonly id: number;
-  readonly userId: number;
-  readonly pipeId: number;
-  readonly taskId: number;
+  readonly _id: string;
+  readonly userId: string;
+  readonly pipeId: string;
+  readonly taskId: string;
 }

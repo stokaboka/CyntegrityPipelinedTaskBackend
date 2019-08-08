@@ -3,8 +3,8 @@
  */
 
 export class TasksDto {
-  readonly id: number;
-  readonly userId: number;
+  readonly _id: string;
+  readonly userId: string;
   readonly name: string;
   readonly averageTime: number;
 }

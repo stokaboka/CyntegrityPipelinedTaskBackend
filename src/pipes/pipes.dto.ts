@@ -3,7 +3,7 @@
  */
 
 export class PipesDto {
-  readonly id: number;
-  readonly userId: number;
+  readonly _id: string;
+  readonly userId: string;
   readonly name: string;
 }

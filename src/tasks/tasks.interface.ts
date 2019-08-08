@@ -5,8 +5,8 @@
 import { Document } from 'mongoose';
 
 export interface Tasks extends Document {
-  readonly id: number;
-  readonly userId: number;
+  readonly _id: string;
+  readonly userId: string;
   readonly name: string;
   readonly averageTime: number;
 }
