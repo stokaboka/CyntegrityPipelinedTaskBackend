@@ -1,4 +1,19 @@
-import { Controller } from '@nestjs/common';
+import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {TasksService} from "./tasks.service";
+import {Tasks} from "./interfaces/tasks.interface";
+import {TasksDto} from "./dto/tasks.dto";
 
 @Controller('tasks')
-export class TasksController {}
+export class TasksController {
+    constructor(private readonly tasksService: TasksService){}
+
+    @Get()
+    find(@Param() params): Promise<Tasks[]>{
+        return this.tasksService.find();
+    }
+
+    @Post()
+    create(@Body() task: TasksDto): Promise<Tasks>{
+        return this.tasksService.create(task);
+    }
+}
