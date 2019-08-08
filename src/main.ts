@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019. Igor Khorev <igorhorev@gmail.com> http://orangem.me
+ */
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 

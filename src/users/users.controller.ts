@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019. Igor Khorev <igorhorev@gmail.com> http://orangem.me
+ */
+
 import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {UsersService} from "./users.service";
 import {Users} from "./users.interface";

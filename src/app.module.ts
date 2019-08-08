@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019. Igor Khorev <igorhorev@gmail.com> http://orangem.me
+ */
+
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
