@@ -2,7 +2,7 @@
  * Copyright (c) 2019. Igor Khorev <igorhorev@gmail.com> http://orangem.me
  */
 
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
 import {UsersService} from "./users.service";
 import {Users} from "./users.interface";
 import {UsersDto} from "./users.dto";
@@ -19,5 +19,10 @@ export class UsersController {
     @Post()
     create(@Body() user:UsersDto): Promise<Users> {
         return this.usersService.create(user);
+    }
+
+    @Delete()
+    remove(@Body() user:UsersDto): Promise<any> {
+        return this.usersService.remove(user);
     }
 }

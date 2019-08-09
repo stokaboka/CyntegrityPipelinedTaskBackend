@@ -22,4 +22,9 @@ export class UsersService {
         const created = new this.usersModel(user);
         return await created.save();
     }
+
+    async remove(user: UsersDto): Promise<any> {
+        const forRemove = new this.usersModel(user);
+        return await forRemove.delete();
+    }
 }
