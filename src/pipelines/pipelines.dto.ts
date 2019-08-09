@@ -5,6 +5,6 @@
 export class PipelinesDto {
   readonly _id: string;
   readonly userId: string;
-  readonly userName: string;
   readonly name: string;
+  readonly user: object;
 }

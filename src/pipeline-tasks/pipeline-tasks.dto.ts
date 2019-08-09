@@ -7,4 +7,7 @@ export class PipelineTasksDto {
   readonly userId: string;
   readonly pipelineId: string;
   readonly taskId: string;
+  readonly user: object;
+  readonly pipeline: object;
+  readonly task: object;
 }
