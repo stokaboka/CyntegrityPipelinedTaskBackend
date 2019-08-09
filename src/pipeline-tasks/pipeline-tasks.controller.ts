@@ -23,7 +23,7 @@ export class PipelineTasksController {
 
     @Post()
     create(@Body() pipelineTask: PipelineTasksDto): Promise<PipelineTasks>{
-        return this.pipelineTasksService.save(pipelineTask);
+        return this.pipelineTasksService.create(pipelineTask);
     }
 
     @Put()

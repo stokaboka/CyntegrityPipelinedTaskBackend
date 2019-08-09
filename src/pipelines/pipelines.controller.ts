@@ -23,7 +23,7 @@ export class PipelinesController {
 
     @Post()
     create(@Body() pipeline:PipelinesDto): Promise<Pipelines>{
-        return this.pipelinessService.save(pipeline);
+        return this.pipelinessService.create(pipeline);
     }
 
     @Put()

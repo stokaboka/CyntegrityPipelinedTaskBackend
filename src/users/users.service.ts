@@ -22,13 +22,19 @@ export class UsersService {
         }
     }
 
+    async create(user: UsersDto): Promise<Users> {
+        const model = new this.usersModel(user);
+        return await model.save();
+    }
+
     async save(user: UsersDto): Promise<Users> {
-        const created = new this.usersModel(user);
-        return await created.save();
+        console.log(user);
+        const model = new this.usersModel(user);
+        return await model.updateOne(model);
     }
 
     async remove(user: UsersDto): Promise<any> {
-        const forRemove = new this.usersModel(user);
-        return await forRemove.delete();
+        const model = new this.usersModel(user);
+        return await model.delete();
     }
 }

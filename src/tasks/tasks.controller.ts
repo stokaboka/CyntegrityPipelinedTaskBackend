@@ -18,7 +18,7 @@ export class TasksController {
 
     @Post()
     create(@Body() task: TasksDto): Promise<Tasks>{
-        return this.tasksService.save(task);
+        return this.tasksService.create(task);
     }
 
     @Put()

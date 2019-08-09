@@ -22,13 +22,18 @@ export class PipelinesService {
         }
     }
 
+    async create(pipeline: PipelinesDto): Promise<Pipelines> {
+        const model = new this.pipelinesModel(pipeline);
+        return await model.save();
+    }
+
     async save(pipeline: PipelinesDto): Promise<Pipelines> {
-        const created = new this.pipelinesModel(pipeline);
-        return await created.save();
+        const model = new this.pipelinesModel(pipeline);
+        return await model.updateOne(model);
     }
 
     async remove(pipeline: PipelinesDto): Promise<any> {
-        const forRemove = new this.pipelinesModel(pipeline);
-        return await forRemove.delete();
+        const model = new this.pipelinesModel(pipeline);
+        return await model.delete();
     }
 }

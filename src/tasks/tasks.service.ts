@@ -22,13 +22,18 @@ export class TasksService {
     }
   }
 
+  async create(task: TasksDto): Promise<Tasks> {
+    const model = new this.tasksModel(task);
+    return await model.save();
+  }
+
   async save(task: TasksDto): Promise<Tasks> {
-    const created = new this.tasksModel(task);
-    return await created.save();
+    const model = new this.tasksModel(task);
+    return await model.updateOne(model);
   }
 
   async remove(task: TasksDto): Promise<any> {
-    const forRemove = new this.tasksModel(task);
-    return await forRemove.delete();
+    const model = new this.tasksModel(task);
+    return await model.delete();
   }
 }

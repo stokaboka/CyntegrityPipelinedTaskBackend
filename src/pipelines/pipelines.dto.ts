@@ -7,4 +7,5 @@ export class PipelinesDto {
   readonly userId: string;
   readonly name: string;
   readonly user: object;
+  readonly pipelineRunTime: number;
 }

@@ -22,13 +22,18 @@ export class PipelineTasksService {
         }
     }
 
+    async create(pipelineTask: PipelineTasksDto): Promise<PipelineTasks> {
+        const model = new this.pipelineTasksModel(pipelineTask);
+        return await model.save();
+    }
+
     async save(pipelineTask: PipelineTasksDto): Promise<PipelineTasks> {
-        const created = new this.pipelineTasksModel(pipelineTask);
-        return await created.save();
+        const model = new this.pipelineTasksModel(pipelineTask);
+        return await model.updateOne(model);
     }
 
     async remove(pipelineTask: PipelineTasksDto): Promise<any> {
-        const forRemove = new this.pipelineTasksModel(pipelineTask);
-        return await forRemove.delete();
+        const model = new this.pipelineTasksModel(pipelineTask);
+        return await model.delete();
     }
 }
