@@ -12,8 +12,13 @@ export class PipelineTasksController {
     constructor(private readonly pipeTasksService: PipelineTasksService){}
 
     @Get()
-    find(@Param() params): Promise<PipelineTasks[]>{
+    find(): Promise<PipelineTasks[]>{
         return this.pipeTasksService.find();
+    }
+
+    @Get('userId/:userId/pipelineId/:pipelineId')
+    findParams(@Param() params): Promise<PipelineTasks[]>{
+        return this.pipeTasksService.find(params);
     }
 
     @Post()

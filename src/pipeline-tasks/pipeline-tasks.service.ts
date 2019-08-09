@@ -14,8 +14,12 @@ export class PipelineTasksService {
         @InjectModel('PipelineTasks') private readonly pipeTasksModel: Model<PipelineTasks>,
     ) {}
 
-    async find(): Promise<PipelineTasks[]> {
-        return await this.pipeTasksModel.find().exec();
+    async find(params: any = null): Promise<PipelineTasks[]> {
+        if(params){
+            return await this.pipeTasksModel.find(params).exec();
+        }else {
+            return await this.pipeTasksModel.find().exec();
+        }
     }
 
     async create(pipeTask: PipelineTasksDto): Promise<PipelineTasks> {
