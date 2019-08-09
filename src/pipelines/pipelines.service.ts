@@ -5,20 +5,20 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Pipes } from './pipes.interface';
-import { PipesDto } from './pipes.dto';
+import { Pipelines } from './pipelines.interface';
+import { PipelinesDto } from './pipelines.dto';
 
 @Injectable()
-export class PipesService {
+export class PipelinesService {
     constructor(
-        @InjectModel('Pipes') private readonly pipesModel: Model<Pipes>,
+        @InjectModel('Pipelines') private readonly pipesModel: Model<Pipelines>,
     ) {}
 
-    async find(): Promise<Pipes[]> {
+    async find(): Promise<Pipelines[]> {
         return await this.pipesModel.find().exec();
     }
 
-    async create(pipe: PipesDto): Promise<Pipes> {
+    async create(pipe: PipelinesDto): Promise<Pipelines> {
         const created = new this.pipesModel(pipe);
         return await created.save();
     }

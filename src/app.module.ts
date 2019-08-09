@@ -8,7 +8,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
-import { PipesModule } from './pipelines/pipes.module';
+import { PipelinesModule } from './pipelines/pipelines.module';
 import { PipelineTasksModule } from './pipeline-tasks/pipeline-tasks.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService} from "./config/config.service";
@@ -22,7 +22,7 @@ import { ConfigService} from "./config/config.service";
     }),
     TasksModule,
     UsersModule,
-    PipesModule,
+    PipelinesModule,
     PipelineTasksModule,
     ConfigModule,
   ],

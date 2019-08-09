@@ -4,7 +4,7 @@
 
 import { Document } from 'mongoose';
 
-export interface Pipes extends Document {
+export interface Pipelines extends Document {
   readonly _id: string;
   readonly userId: string;
   readonly name: string;
