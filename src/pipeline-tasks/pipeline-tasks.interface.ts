@@ -7,6 +7,6 @@ import { Document } from 'mongoose';
 export interface PipelineTasks extends Document {
   readonly _id: string;
   readonly userId: string;
-  readonly pipeId: string;
+  readonly pipelineId: string;
   readonly taskId: string;
 }

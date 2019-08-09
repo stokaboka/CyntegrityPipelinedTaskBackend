@@ -7,6 +7,6 @@ import * as mongoose from 'mongoose';
 export const PipelineTasksSchema = new mongoose.Schema({
     id: Number,
     userId: Number,
-    pipeId: Number,
+    pipelineId: Number,
     taskId: Number,
 });
