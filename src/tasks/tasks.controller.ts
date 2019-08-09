@@ -6,6 +6,7 @@ import {Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import {TasksService} from "./tasks.service";
 import {Tasks} from "./tasks.interface";
 import {TasksDto} from "./tasks.dto";
+import {Pipelines} from "../pipelines/pipelines.interface";
 
 @Controller('tasks')
 export class TasksController {
@@ -14,6 +15,11 @@ export class TasksController {
     @Get()
     find(@Param() params): Promise<Tasks[]>{
         return this.tasksService.find();
+    }
+
+    @Get('average-sum')
+    averageTimeSum(@Param() params): Promise<any>{
+        return this.tasksService.averageTimeSum(params);
     }
 
     @Post()

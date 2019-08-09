@@ -22,6 +22,20 @@ export class TasksService {
     }
   }
 
+  async averageTimeSum(params: any = null): Promise<any> {
+    console.log(params);
+    if (params) {
+      return await this.tasksModel.aggregate([
+        { $match: { ...params } },
+        { $group: { _id: params, averageTime: { $sum: '$averageTime' }}},
+      ]);
+    } else {
+      return await this.tasksModel.aggregate([
+        { $group: {_id: null, averageTime: { $sum: '$averageTime' }}},
+      ]);
+    }
+  }
+
   async create(task: TasksDto): Promise<Tasks> {
     const model = new this.tasksModel(task);
     return await model.save();

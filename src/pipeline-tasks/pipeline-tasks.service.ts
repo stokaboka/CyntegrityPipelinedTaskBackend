@@ -36,4 +36,18 @@ export class PipelineTasksService {
         const model = new this.pipelineTasksModel(pipelineTask);
         return await model.delete();
     }
+
+    async timesSum(params: any = null): Promise<any> {
+        console.log(params);
+        if (params) {
+            return await this.pipelineTasksModel.aggregate([
+                { $match: { ...params } },
+                { $group: { _id: params, averageTime: { $sum: '$task.averageTime' }, runTime: { $sum: '$pipeline.runTime' }}},
+            ]);
+        } else {
+            return await this.pipelineTasksModel.aggregate([
+                { $group: {_id: null, averageTime: { $sum: '$task.averageTime' }, runTime: { $sum: '$pipeline.runTime' }}},
+            ]);
+        }
+    }
 }

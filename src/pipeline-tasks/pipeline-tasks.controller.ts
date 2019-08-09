@@ -21,6 +21,16 @@ export class PipelineTasksController {
         return this.pipelineTasksService.find(params);
     }
 
+    @Get('times-sum')
+    timesSum(): Promise<any>{
+        return this.pipelineTasksService.timesSum();
+    }
+
+    @Get('times-sum/userId/:userId/pipelineId/:pipelineId')
+    timesSumByParam(@Param() params): Promise<any>{
+        return this.pipelineTasksService.timesSum(params);
+    }
+
     @Post()
     create(@Body() pipelineTask: PipelineTasksDto): Promise<PipelineTasks>{
         return this.pipelineTasksService.create(pipelineTask);
