@@ -2,27 +2,37 @@
  * Copyright (c) 2019. Igor Khorev <igorhorev@gmail.com> http://orangem.me
  */
 
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import {PipelineTasksService} from "./pipeline-tasks.service";
 import {PipelineTasks} from "./pipeline-tasks.interface";
 import {PipelineTasksDto} from "./pipeline-tasks.dto";
 
 @Controller('pipeline-tasks')
 export class PipelineTasksController {
-    constructor(private readonly pipeTasksService: PipelineTasksService){}
+    constructor(private readonly pipelineTasksService: PipelineTasksService){}
 
     @Get()
     find(): Promise<PipelineTasks[]>{
-        return this.pipeTasksService.find();
+        return this.pipelineTasksService.find();
     }
 
     @Get('userId/:userId/pipelineId/:pipelineId')
     findParams(@Param() params): Promise<PipelineTasks[]>{
-        return this.pipeTasksService.find(params);
+        return this.pipelineTasksService.find(params);
     }
 
     @Post()
-    create(@Body() pipeTask: PipelineTasksDto): Promise<PipelineTasks>{
-        return this.pipeTasksService.create(pipeTask);
+    create(@Body() pipelineTask: PipelineTasksDto): Promise<PipelineTasks>{
+        return this.pipelineTasksService.save(pipelineTask);
+    }
+
+    @Put()
+    save(@Body() pipelineTask: PipelineTasksDto): Promise<PipelineTasks>{
+        return this.pipelineTasksService.save(pipelineTask);
+    }
+
+    @Delete()
+    remove(@Body() pipelineTask:PipelineTasksDto): Promise<any> {
+        return this.pipelineTasksService.remove(pipelineTask);
     }
 }

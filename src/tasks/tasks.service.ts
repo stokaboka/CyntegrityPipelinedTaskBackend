@@ -14,13 +14,21 @@ export class TasksService {
     @InjectModel('Tasks') private readonly tasksModel: Model<Tasks>,
   ) {}
 
-  async find(): Promise<Tasks[]> {
-    return await this.tasksModel.find().exec();
+  async find(params: any = null): Promise<Tasks[]> {
+    if(params){
+      return await this.tasksModel.find(params).exec();
+    }else {
+      return await this.tasksModel.find().exec();
+    }
   }
 
-  async create(task: TasksDto): Promise<Tasks> {
+  async save(task: TasksDto): Promise<Tasks> {
     const created = new this.tasksModel(task);
     return await created.save();
   }
 
+  async remove(task: TasksDto): Promise<any> {
+    const forRemove = new this.tasksModel(task);
+    return await forRemove.delete();
+  }
 }

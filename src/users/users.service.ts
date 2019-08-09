@@ -14,11 +14,15 @@ export class UsersService {
         @InjectModel('Users') private readonly usersModel: Model<Users>,
     ) {}
 
-    async find(): Promise<Users[]> {
-        return await this.usersModel.find().exec();
+    async find(params: any = null): Promise<Users[]> {
+        if(params){
+            return await this.usersModel.find(params).exec();
+        }else {
+            return await this.usersModel.find().exec();
+        }
     }
 
-    async create(user: UsersDto): Promise<Users> {
+    async save(user: UsersDto): Promise<Users> {
         const created = new this.usersModel(user);
         return await created.save();
     }

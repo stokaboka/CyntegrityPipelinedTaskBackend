@@ -11,20 +11,24 @@ import { PipelineTasksDto } from './pipeline-tasks.dto';
 @Injectable()
 export class PipelineTasksService {
     constructor(
-        @InjectModel('PipelineTasks') private readonly pipeTasksModel: Model<PipelineTasks>,
+        @InjectModel('PipelineTasks') private readonly pipelineTasksModel: Model<PipelineTasks>,
     ) {}
 
     async find(params: any = null): Promise<PipelineTasks[]> {
         if(params){
-            return await this.pipeTasksModel.find(params).exec();
+            return await this.pipelineTasksModel.find(params).exec();
         }else {
-            return await this.pipeTasksModel.find().exec();
+            return await this.pipelineTasksModel.find().exec();
         }
     }
 
-    async create(pipeTask: PipelineTasksDto): Promise<PipelineTasks> {
-        const created = new this.pipeTasksModel(pipeTask);
+    async save(pipelineTask: PipelineTasksDto): Promise<PipelineTasks> {
+        const created = new this.pipelineTasksModel(pipelineTask);
         return await created.save();
     }
 
+    async remove(pipelineTask: PipelineTasksDto): Promise<any> {
+        const forRemove = new this.pipelineTasksModel(pipelineTask);
+        return await forRemove.delete();
+    }
 }
