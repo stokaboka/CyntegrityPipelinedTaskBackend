@@ -11,7 +11,7 @@ import { PipelineTasksSchema } from './pipeline-tasks.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: 'PipeTasks', schema: PipelineTasksSchema },
+      { name: 'PipelineTasks', schema: PipelineTasksSchema },
     ]),
   ],
   providers: [PipelineTasksService],

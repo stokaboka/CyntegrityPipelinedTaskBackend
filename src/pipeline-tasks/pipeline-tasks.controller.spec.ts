@@ -5,7 +5,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PipelineTasksController } from './pipeline-tasks.controller';
 
-describe('PipeTasks Controller', () => {
+describe('PipelineTasks Controller', () => {
   let controller: PipelineTasksController;
 
   beforeEach(async () => {

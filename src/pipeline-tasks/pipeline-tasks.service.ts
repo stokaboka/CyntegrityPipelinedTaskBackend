@@ -5,20 +5,20 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { PipeTasks } from './pipeline-tasks.interface';
+import { PipelineTasks } from './pipeline-tasks.interface';
 import { PipelineTasksDto } from './pipeline-tasks.dto';
 
 @Injectable()
 export class PipelineTasksService {
     constructor(
-        @InjectModel('PipeTasks') private readonly pipeTasksModel: Model<PipeTasks>,
+        @InjectModel('PipelineTasks') private readonly pipeTasksModel: Model<PipelineTasks>,
     ) {}
 
-    async find(): Promise<PipeTasks[]> {
+    async find(): Promise<PipelineTasks[]> {
         return await this.pipeTasksModel.find().exec();
     }
 
-    async create(pipeTask: PipelineTasksDto): Promise<PipeTasks> {
+    async create(pipeTask: PipelineTasksDto): Promise<PipelineTasks> {
         const created = new this.pipeTasksModel(pipeTask);
         return await created.save();
     }

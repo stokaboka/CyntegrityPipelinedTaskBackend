@@ -5,7 +5,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PipelineTasksService } from './pipeline-tasks.service';
 
-describe('PipeTasksService', () => {
+describe('PipelineTasksService', () => {
   let service: PipelineTasksService;
 
   beforeEach(async () => {
