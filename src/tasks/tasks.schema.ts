@@ -5,8 +5,8 @@
 import * as mongoose from 'mongoose';
 
 export const TasksSchema = new mongoose.Schema({
-    id: Number,
-    userId: Number,
+    userId: String,
+    user: Object,
     name: String,
     averageTime: Number,
 });

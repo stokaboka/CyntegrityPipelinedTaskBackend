@@ -5,6 +5,7 @@
 export class TasksDto {
   readonly _id: string;
   readonly userId: string;
+  readonly user: object;
   readonly name: string;
   readonly averageTime: number;
 }
