@@ -3,13 +3,13 @@
  */
 
 import {Body, Controller, Get, Param, Post} from '@nestjs/common';
-import {PipeTasksService} from "./pipe-tasks.service";
-import {PipeTasks} from "./pipe-tasks.interface";
-import {PipeTasksDto} from "./pipe-tasks.dto";
+import {PipelineTasksService} from "./pipeline-tasks.service";
+import {PipeTasks} from "./pipeline-tasks.interface";
+import {PipelineTasksDto} from "./pipeline-tasks.dto";
 
 @Controller('pipe-tasks')
-export class PipeTasksController {
-    constructor(private readonly pipeTasksService: PipeTasksService){}
+export class PipelineTasksController {
+    constructor(private readonly pipeTasksService: PipelineTasksService){}
 
     @Get()
     find(@Param() params): Promise<PipeTasks[]>{
@@ -17,7 +17,7 @@ export class PipeTasksController {
     }
 
     @Post()
-    create(@Body() pipeTask: PipeTasksDto): Promise<PipeTasks>{
+    create(@Body() pipeTask: PipelineTasksDto): Promise<PipeTasks>{
         return this.pipeTasksService.create(pipeTask);
     }
 }

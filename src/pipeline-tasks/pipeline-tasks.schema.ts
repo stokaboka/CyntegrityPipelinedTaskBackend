@@ -4,7 +4,7 @@
 
 import * as mongoose from 'mongoose';
 
-export const PipeTasksSchema = new mongoose.Schema({
+export const PipelineTasksSchema = new mongoose.Schema({
     id: Number,
     userId: Number,
     pipeId: Number,
