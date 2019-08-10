@@ -138,7 +138,7 @@ export class TaskRunnerService {
 
         return new Promise((resolve, reject) => {
 
-            const ls = spawn('./sleep.sh', [`${task.name}`, `${task._id}`, `2s`]);
+            const ls = spawn('./sleep.sh', [`${task.name}`, `${task._id}`, `${task.averageTime}s`]);
             this.startTask(task);
 
             ls.stdout.on('data', (data) => {
