@@ -48,8 +48,8 @@ export class ConfigService implements MongooseOptionsFactory {
 
     createMongooseOptions(): MongooseModuleOptions {
         const out: any =  {
-            type: 'mongodb',
             uri: String(this.envConfig.DB_URI),
+            // useNewUrlParser: true,
         };
         // tslint:disable-next-line:no-console
         console.log(out);

@@ -5,12 +5,15 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
+import {RedisIoAdapter} from "./adapters/RedisIoAdapter";
 
 async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(
       AppModule,
   );
+
+  app.useWebSocketAdapter(new RedisIoAdapter(app));
 
   const apiVersionNumber = app.get('ConfigService').apiVersion;
   app.setGlobalPrefix(`api/v${apiVersionNumber}`);
@@ -21,8 +24,10 @@ async function bootstrap() {
   app.useStaticAssets(publicPath);
 
   app.enableCors({
-    origin: '*',
-    allowedHeaders: 'Content-Type,Authorization,Accept',
+    // origin: ['*', 'http://localhost:8080'],
+    credentials: true,
+    origin: true,
+    // allowedHeaders: 'Content-Type,Authorization,Accept',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
 
