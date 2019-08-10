@@ -19,6 +19,8 @@ import { TaskRunnerService } from './task-runner.service';
 export class TaskRunnerGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
 
   constructor(private readonly taskRunner: TaskRunnerService) {
+    // tslint:disable-next-line:no-console
+    console.log('************* TaskRunnerGateway **************');
     taskRunner.setGateway(this);
   }
 

@@ -138,7 +138,9 @@ export class TaskRunnerService {
 
         return new Promise((resolve, reject) => {
 
-            const ls = spawn('./sleep.sh', [`${task.name}`, `${task._id}`, `${task.averageTime}s`]);
+            const delta = (task.averageTime / 5) * Math.sign(Math.random() - 0.5);
+            const time = task.averageTime + delta;
+            const ls = spawn('./sleep.sh', [`${task.name}`, `${task._id}`, `${time}s`]);
             this.startTask(task);
 
             ls.stdout.on('data', (data) => {
