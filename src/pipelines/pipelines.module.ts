@@ -15,6 +15,7 @@ import { PipelinesSchema } from './pipelines.schema';
     ]),
   ],
   providers: [PipelinesService],
-  controllers: [PipelinesController]
+  controllers: [PipelinesController],
+  exports: [PipelinesService],
 })
 export class PipelinesModule {}

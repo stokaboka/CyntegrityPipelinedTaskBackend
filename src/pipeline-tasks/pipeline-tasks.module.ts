@@ -15,6 +15,7 @@ import { PipelineTasksSchema } from './pipeline-tasks.schema';
     ]),
   ],
   providers: [PipelineTasksService],
-  controllers: [PipelineTasksController]
+  controllers: [PipelineTasksController],
+  exports: [PipelineTasksService],
 })
 export class PipelineTasksModule {}
