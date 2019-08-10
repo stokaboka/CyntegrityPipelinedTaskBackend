@@ -3,6 +3,7 @@ import { spawn } from 'child_process';
 import {PipelinesService} from '../pipelines/pipelines.service';
 import {PipelineTasksService} from '../pipeline-tasks/pipeline-tasks.service';
 import {PipelinesDto} from '../pipelines/pipelines.dto';
+import {TaskRunnerGateway} from './task-runner.gateway';
 
 @Injectable()
 export class TaskRunnerService {
@@ -15,19 +16,32 @@ export class TaskRunnerService {
     private pipelines: any[] = [];
     private busy: boolean = false;
 
-    getStatus(): any {
+    private gateway: TaskRunnerGateway;
+
+    setGateway(gateway: TaskRunnerGateway) {
+        this.gateway = gateway;
+    }
+
+    getStatus(message: string, pipeline: PipelinesDto = null): any {
         const {busy, pipelines} = this;
         const out = {
             busy,
+            message,
             active: {
-                pipeline: pipelines.length > 0 ? pipelines[0] : null,
-                task: pipelines[0].task.length > 0 ?  pipelines[0].task[0] : null,
+                pipeline: pipelines.length > 0 ? pipelines[0].pipeline._id : null,
+                task: pipelines.length > 0 && pipelines[0].tasks.length > 0 ?  pipelines[0].tasks[0]._id : null,
             },
-            scheduled: {
-                pipelines: pipelines.length > 1 ? pipelines.filter((e, i) => i > 0) : null,
-            },
+            scheduled: pipelines.length > 1 ? pipelines.filter((e, i) => i > 0).map(e => e.pipeline._id) : null,
+            updated: pipeline,
         };
         return out;
+    }
+
+    sendStatus(message: string, pipeline: PipelinesDto = null) {
+        const status = this.getStatus(message, pipeline);
+        // tslint:disable-next-line:no-console
+        console.log('sendStatus');
+        this.gateway.emit('task-runner-status', status);
     }
 
     async addPipeline(pipeline: any = null) {
@@ -49,7 +63,9 @@ export class TaskRunnerService {
         // tslint:disable-next-line:no-console
         // console.log(this.pipelines);
 
-        if (!this.busy) {
+        if (this.busy) {
+            this.sendStatus('Pipeline scheduled');
+        } else {
             this.nextTask();
         }
     }
@@ -58,12 +74,14 @@ export class TaskRunnerService {
         // tslint:disable-next-line:no-console
         console.log(`savePipelineRunTime ${pipeline.name} ${pipeline.runTime}`);
         await this.pipelinesService.save(pipeline);
+        this.sendStatus('Pipeline updated', pipeline);
     }
 
     startTask(task: any) {
         this.busy = true;
         // tslint:disable-next-line:no-console
         console.log(`startTask ${task.name}`);
+        this.sendStatus(`Start Task ${task.name}`);
     }
 
     endTask(task: any, data: any = null) {
@@ -88,6 +106,7 @@ export class TaskRunnerService {
         }
 
         this.nextTask();
+        this.sendStatus(`End Task ${task.name}`);
     }
 
     async nextTask() {
@@ -96,6 +115,10 @@ export class TaskRunnerService {
                 const task = this.pipelines[0].tasks[0];
                 await this.runTask(task);
             }
+        } else {
+            // tslint:disable-next-line:no-console
+            console.log('pipelines queue empty');
+            this.sendStatus('Pipelines Queue is Empty');
         }
     }
 
@@ -112,7 +135,7 @@ export class TaskRunnerService {
                 duration: 0,
             },
         };
-        // this.fire(TaskRunnerService.TASK_START, {task, out});
+
         return new Promise((resolve, reject) => {
 
             const ls = spawn('./sleep.sh', [`${task.name}`, `${task._id}`, `2s`]);
@@ -128,7 +151,6 @@ export class TaskRunnerService {
                 // tslint:disable-next-line:no-console
                 console.log(`stderr: ${data}`);
                 out.time.end = new Date();
-                // this.fire(TaskRunerService.TASK_END, {task, out});
                 this.endTask(task);
                 reject(data);
             });
@@ -142,7 +164,6 @@ export class TaskRunnerService {
                     out.time.duration = out.time.end - out.time.start;
                 }
                 this.endTask(task, out);
-                // this.fire(TaskRunnerService.TASK_END, {task, out});
                 resolve(out);
             });
         });
