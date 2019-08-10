@@ -28,7 +28,7 @@ export class UsersService {
     }
 
     async save(user: UsersDto): Promise<Users> {
-        console.log(user);
+        // console.log(user);
         const model = new this.usersModel(user);
         return await model.updateOne(model);
     }

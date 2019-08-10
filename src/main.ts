@@ -5,7 +5,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import {RedisIoAdapter} from "./adapters/RedisIoAdapter";
+// import {RedisIoAdapter} from "./adapters/RedisIoAdapter";
 
 async function bootstrap() {
 
@@ -13,7 +13,7 @@ async function bootstrap() {
       AppModule,
   );
 
-  app.useWebSocketAdapter(new RedisIoAdapter(app));
+  // app.useWebSocketAdapter(new RedisIoAdapter(app));
 
   const apiVersionNumber = app.get('ConfigService').apiVersion;
   app.setGlobalPrefix(`api/v${apiVersionNumber}`);

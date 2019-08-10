@@ -23,7 +23,7 @@ export class TasksService {
   }
 
   async averageTimeSum(params: any = null): Promise<any> {
-    console.log(params);
+    // console.log(params);
     if (params) {
       return await this.tasksModel.aggregate([
         { $match: { ...params } },

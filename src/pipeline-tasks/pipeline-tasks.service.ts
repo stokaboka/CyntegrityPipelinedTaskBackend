@@ -38,7 +38,7 @@ export class PipelineTasksService {
     }
 
     async timesSum(params: any = null): Promise<any> {
-        console.log(params);
+        // console.log(params);
         if (params) {
             return await this.pipelineTasksModel.aggregate([
                 { $match: { ...params } },
