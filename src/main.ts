@@ -24,11 +24,10 @@ async function bootstrap() {
   app.useStaticAssets(publicPath);
 
   app.enableCors({
-    // origin: ['*', 'http://localhost:8080'],
     credentials: true,
     origin: true,
     // allowedHeaders: 'Content-Type,Authorization,Accept',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
 
   const port = app.get('ConfigService').port || 3000;
