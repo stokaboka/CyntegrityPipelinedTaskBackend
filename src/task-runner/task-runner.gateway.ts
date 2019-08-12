@@ -14,14 +14,16 @@ import { map } from 'rxjs/operators';
 import { Client, Server } from 'socket.io';
 
 import { TaskRunnerService } from './task-runner.service';
+import {Injectable} from '@nestjs/common';
 
+@Injectable()
 @WebSocketGateway()
 export class TaskRunnerGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
 
-  constructor(private readonly taskRunner: TaskRunnerService) {
+  constructor(private readonly taskRunnerService: TaskRunnerService) {
     // tslint:disable-next-line:no-console
     console.log('************* TaskRunnerGateway **************');
-    taskRunner.setGateway(this);
+    taskRunnerService.setGateway(this);
   }
 
   @WebSocketServer()
@@ -76,7 +78,7 @@ export class TaskRunnerGateway implements OnGatewayConnection, OnGatewayDisconne
 
   @SubscribeMessage('task-runner-status')
   async taskRunnerStatus(client: any, data: any): Promise<any> {
-    const result = this.taskRunner.getStatus('Task Runner status');
+    const result = this.taskRunnerService.getStatus('Task Runner status');
     return {
       task: 'task-runner-status',
       result,
@@ -85,7 +87,7 @@ export class TaskRunnerGateway implements OnGatewayConnection, OnGatewayDisconne
 
   @SubscribeMessage('run-pipeline')
   async runPipeline(client: any, data: any): Promise<any> {
-    await this.taskRunner.addPipeline(data);
+    await this.taskRunnerService.addPipeline(data);
     return {
       task: 'run-pipeline',
       result: 'SCHEDULED',
