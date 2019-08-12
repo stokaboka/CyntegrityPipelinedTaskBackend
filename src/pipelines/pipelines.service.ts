@@ -59,7 +59,6 @@ export class PipelinesService {
    * @param params
    */
   async median(params: any = null): Promise<any> {
-    console.log('median', params);
     return await this.pipelinesModel.aggregate([
       { $match: { ...params } },
       {
