@@ -41,11 +41,11 @@ export class PipelinesService {
     if (params) {
       return await this.pipelinesModel.aggregate([
         { $match: { ...params } },
-        { $group: { _id: params, runTime: { $sum: 'runTime' } } },
+        { $group: { _id: params, runTime: { $sum: '$runTime' } } },
       ]);
     } else {
       return await this.pipelinesModel.aggregate([
-        { $group: { _id: null, runTime: { $sum: 'runTime' } } },
+        { $group: { _id: null, runTime: { $sum: '$runTime' } } },
       ]);
     }
   }
@@ -64,7 +64,9 @@ export class PipelinesService {
           values: { $push: '$runTime' },
         },
       },
+
       { $unwind: '$values' },
+
       { $sort: { values: 1 } },
 
       {
@@ -82,6 +84,18 @@ export class PipelinesService {
       },
 
       {
+        $project: {
+          count: 1,
+          values: 1,
+          midpoint: 1,
+          high: 1,
+          low: {
+                $cond: { if: { $eq: [ '$high', '$low' ] }, then: { $subtract: ['$low', 1] }, else: '$low' },
+              },
+        },
+      },
+
+      {
         $group: {
           _id: null,
           values: { $push: '$values' },
@@ -92,12 +106,17 @@ export class PipelinesService {
 
       {
         $project: {
+          values: 1,
           beginValue: { $arrayElemAt: ['$values', '$high'] },
           endValue: { $arrayElemAt: ['$values', '$low'] },
         },
       },
 
-     { $project: { median: { $avg: ['$beginValue', '$endValue'] } } },
+     { $project: {
+         values: 1,
+       median: { $avg: ['$beginValue', '$endValue'] } },
+     },
+
     ]);
   }
 }

@@ -55,7 +55,7 @@ export class TaskScheduler extends TaskRunner {
             if (this.pipelines[0].tasks.length === 0) {
                 const completePipeline = this.pipelines.splice(0, 1)[0];
                 const pipeline: PipelinesDto = completePipeline.pipeline as PipelinesDto;
-                pipeline.runTime = completePipeline.time;
+                pipeline.runTime = Math.round(completePipeline.time * 1000) / 1000;
                 pipeline.status = 'COMPLETE';
                 this.savePipeline(pipeline);
             }
