@@ -36,6 +36,11 @@ export class PipelinesController {
         return this.pipelinessService.median();
     }
 
+    @Get('median/userId/:userId')
+    medianByParam(@Param() params): Promise<Pipelines[]> {
+        return this.pipelinessService.median(params);
+    }
+
     @Post()
     create(@Body() pipeline: PipelinesDto): Promise<Pipelines> {
         return this.pipelinessService.create(pipeline);
