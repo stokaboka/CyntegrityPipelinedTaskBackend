@@ -31,6 +31,11 @@ export class PipelinesController {
         return this.pipelinessService.runTimeSum(params);
     }
 
+    @Get('median')
+    median(): Promise<Pipelines[]> {
+        return this.pipelinessService.median();
+    }
+
     @Post()
     create(@Body() pipeline: PipelinesDto): Promise<Pipelines> {
         return this.pipelinessService.create(pipeline);

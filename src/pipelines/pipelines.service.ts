@@ -45,8 +45,54 @@ export class PipelinesService {
       ]);
     } else {
       return await this.pipelinesModel.aggregate([
-        {$group: {_id: null, runTime: { $sum: 'runTime' }}},
+        { $group: { _id: null, runTime: { $sum: 'runTime' } } },
       ]);
     }
+  }
+
+  /**
+   * idea from https://www.compose.com/articles/mongo-metrics-finding-a-happy-median/
+   * @param params
+   */
+  async median(): Promise<any> {
+    return await this.pipelinesModel.aggregate([
+      // { $match: { ...params } },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+          values: { $push: 'runTime' },
+        },
+      },
+      { $unwind: '$values' },
+      { $sort: { values: 1 } },
+      {
+        $project: { count: 1, values: 1, midpoint: { $divide: ['$count', 2] } },
+      },
+      {
+        $project: {
+          count: 1,
+          values: 1,
+          midpoint: 1,
+          high: { $ceil: '$midpoint' },
+          low: { $floor: '$midpoint' },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          values: { $push: '$values' },
+          high: { $avg: '$high' },
+          low: { $avg: '$low' },
+        },
+      },
+      {
+        $project: {
+          beginValue: { $arrayElemAt: ['$values', '$high'] },
+          endValue: { $arrayElemAt: ['$values', '$low'] },
+        },
+      },
+      { $project: { median: { $avg: ['$beginValue', '$endValue'] } } },
+    ]);
   }
 }
