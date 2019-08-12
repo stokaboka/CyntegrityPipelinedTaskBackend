@@ -61,14 +61,16 @@ export class PipelinesService {
         $group: {
           _id: null,
           count: { $sum: 1 },
-          values: { $push: 'runTime' },
+          values: { $push: '$runTime' },
         },
       },
       { $unwind: '$values' },
       { $sort: { values: 1 } },
+
       {
         $project: { count: 1, values: 1, midpoint: { $divide: ['$count', 2] } },
       },
+
       {
         $project: {
           count: 1,
@@ -78,6 +80,7 @@ export class PipelinesService {
           low: { $floor: '$midpoint' },
         },
       },
+
       {
         $group: {
           _id: null,
@@ -86,13 +89,15 @@ export class PipelinesService {
           low: { $avg: '$low' },
         },
       },
+
       {
         $project: {
           beginValue: { $arrayElemAt: ['$values', '$high'] },
           endValue: { $arrayElemAt: ['$values', '$low'] },
         },
       },
-      { $project: { median: { $avg: ['$beginValue', '$endValue'] } } },
+
+     { $project: { median: { $avg: ['$beginValue', '$endValue'] } } },
     ]);
   }
 }
