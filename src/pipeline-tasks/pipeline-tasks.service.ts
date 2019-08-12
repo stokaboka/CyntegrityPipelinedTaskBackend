@@ -15,9 +15,9 @@ export class PipelineTasksService {
     ) {}
 
     async find(params: any = null): Promise<PipelineTasks[]> {
-        if(params){
+        if (params) {
             return await this.pipelineTasksModel.find(params).exec();
-        }else {
+        } else {
             return await this.pipelineTasksModel.find().exec();
         }
     }
@@ -42,11 +42,11 @@ export class PipelineTasksService {
         if (params) {
             return await this.pipelineTasksModel.aggregate([
                 { $match: { ...params } },
-                { $group: { _id: params, averageTime: { $sum: '$task.averageTime' }, runTime: { $sum: '$pipeline.runTime' }}},
+                { $group: { _id: params, averageTime: { $sum: { $toDouble: '$task.averageTime' }  }, runTime: { $sum: '$pipeline.runTime' }}},
             ]);
         } else {
             return await this.pipelineTasksModel.aggregate([
-                { $group: {_id: null, averageTime: { $sum: '$task.averageTime' }, runTime: { $sum: '$pipeline.runTime' }}},
+                { $group: {_id: null, averageTime: { $sum: { $toDouble: '$task.averageTime' } }, runTime: { $sum: '$pipeline.runTime' }}},
             ]);
         }
     }
