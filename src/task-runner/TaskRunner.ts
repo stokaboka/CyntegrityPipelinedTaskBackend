@@ -49,22 +49,22 @@ export class TaskRunner {
     sendStatus(message: string, data: any = null) {
         const status = this.getStatus(message, data);
         // tslint:disable-next-line:no-console
-        console.log('sendStatus');
+        console.log('sendStatus', message);
         this.gateway.emit('task-runner-status', status);
     }
 
     async savePipeline(pipelineInfo: any) {
         // tslint:disable-next-line:no-console
-        console.log(`savePipelineRunTime ${pipelineInfo.pipeline.name} ${pipelineInfo.status} ${pipelineInfo.runTime}`);
+        // console.log(`savePipelineRunTime ${pipelineInfo.pipeline.name} ${pipelineInfo.status} ${pipelineInfo.runTime}`);
         await this.pipelinesService.save(pipelineInfo.pipeline);
         this.sendStatus('Pipeline updated', pipelineInfo.pipeline);
     }
 
-    async saveTask(task: TasksDto) {
+    async saveTask(message: string, task: TasksDto) {
         // tslint:disable-next-line:no-console
-        console.log(`saveTask ${task.name}`);
+        // console.log(`saveTask ${task.name}`);
         await this.tasksService.save(task);
-        this.sendStatus('Task updated', task);
+        this.sendStatus(message, task);
     }
 
 }

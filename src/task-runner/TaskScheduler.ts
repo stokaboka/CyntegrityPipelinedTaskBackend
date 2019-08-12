@@ -30,20 +30,18 @@ export class TaskScheduler extends TaskRunner {
     taskStarted(task: TasksDto) {
         this.busy = true;
         // tslint:disable-next-line:no-console
-        console.log(`taskStarted ${task.name}`);
+        // console.log(`taskStarted ${task.name}`);
         task.status = 'STARTED';
-        this.saveTask(task);
-        this.sendStatus('Task Started', task);
+        this.saveTask('Task Started', task);
     }
 
     endTask(task: TasksDto, data: any = null) {
         this.busy = false;
         // tslint:disable-next-line:no-console
-        console.log(`endTask ${task.name}`);
+        // console.log(`endTask ${task.name}`);
 
         task.status = 'COMPLETE';
-        this.saveTask(task);
-        this.sendStatus('End Task', task);
+        this.saveTask('Task Complete', task);
 
         if (this.pipelines.length > 0) {
             // seconds
@@ -73,7 +71,7 @@ export class TaskScheduler extends TaskRunner {
             }
         } else {
             // tslint:disable-next-line:no-console
-            console.log('pipelines queue empty');
+            // console.log('pipelines queue empty');
             this.sendStatus('Pipelines Queue is Empty');
         }
     }
@@ -101,13 +99,13 @@ export class TaskScheduler extends TaskRunner {
 
             ls.stdout.on('data', (data) => {
                 // tslint:disable-next-line:no-console
-                console.log(`stdout: ${data}`);
+                // console.log(`stdout: ${data}`);
                 out.data = data;
             });
 
             ls.stderr.on('data', (data) => {
                 // tslint:disable-next-line:no-console
-                console.log(`stderr: ${data}`);
+                // console.log(`stderr: ${data}`);
                 out.time.end = new Date();
                 this.endTask(task);
                 reject(data);
@@ -115,7 +113,7 @@ export class TaskScheduler extends TaskRunner {
 
             ls.on('close', (code) => {
                 // tslint:disable-next-line:no-console
-                console.log(`child process exited with code ${code}`);
+                // console.log(`child process exited with code ${code}`);
                 out.code = code;
                 out.time.end = Date.now();
                 if (out.time.end !== null) {
