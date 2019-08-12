@@ -36,14 +36,7 @@ export class TaskScheduler extends TaskRunner {
         this.saveTask('Task Started', task);
     }
 
-    endTask(task: TasksDto, data: any = null) {
-        this.busy = false;
-        // tslint:disable-next-line:no-console
-        // console.log(`endTask ${task.name}`);
-
-        task.status = 'COMPLETE';
-        this.saveTask('Task Complete', task);
-
+    fixTask(data: any = null) {
         if (this.pipelines.length > 0) {
             // seconds
             this.pipelines[0].time += data.time.duration / 1000;
@@ -60,7 +53,21 @@ export class TaskScheduler extends TaskRunner {
                 this.savePipeline(pipeline);
             }
         }
+    }
 
+    errorTask(task: TasksDto, data: any = null) {
+        this.busy = false;
+        task.status = 'ERROR';
+        this.saveTask('Task Error', task);
+        this.fixTask(data);
+        this.nextTask();
+    }
+
+    endTask(task: TasksDto, data: any = null) {
+        this.busy = false;
+        task.status = 'COMPLETE';
+        this.saveTask('Task Complete', task);
+        this.fixTask(data);
         this.nextTask();
     }
 
@@ -105,12 +112,14 @@ export class TaskScheduler extends TaskRunner {
                 out.data = data;
             });
 
-            ls.stderr.on('data', (data) => {
+            ls.stderr.on('data', (code) => {
                 // tslint:disable-next-line:no-console
                 // console.log(`stderr: ${data}`);
-                out.time.end = new Date();
-                this.endTask(task);
-                reject(data);
+                out.code = code;
+                out.time.end = Date.now();
+                out.time.duration = out.time.end - out.time.start;
+                this.errorTask(task, out);
+                reject(code);
             });
 
             ls.on('close', (code) => {
@@ -118,9 +127,7 @@ export class TaskScheduler extends TaskRunner {
                 // console.log(`child process exited with code ${code}`);
                 out.code = code;
                 out.time.end = Date.now();
-                if (out.time.end !== null) {
-                    out.time.duration = out.time.end - out.time.start;
-                }
+                out.time.duration = out.time.end - out.time.start;
                 this.endTask(task, out);
                 resolve(out);
             });
