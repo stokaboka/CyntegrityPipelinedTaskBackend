@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Igor Khorev <igorhorev@gmail.com> http://orangem.me
+ * Copyright (c) 2019. Igor Khorev <igorhorev@gmail.com> http://orangem.me 
  */
 
 import { Module, Global } from '@nestjs/common';

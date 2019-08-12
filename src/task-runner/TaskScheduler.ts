@@ -93,7 +93,8 @@ export class TaskScheduler extends TaskRunner {
 
         return new Promise((resolve, reject) => {
 
-            const delta = (task.averageTime / 5) * Math.sign(Math.random() - 0.5);
+            // const delta = (task.averageTime / 5) * Math.sign(Math.random() - 0.5);
+            const delta = 1 * Math.sign(Math.random() - 0.5);
             const time = task.averageTime + delta;
             const ls = spawn('./sleep.sh', [`${task.name}`, `${task._id}`, `${time}s`]);
             this.taskStarted(task);
