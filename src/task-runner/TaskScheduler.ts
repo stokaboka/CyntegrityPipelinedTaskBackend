@@ -20,7 +20,8 @@ export class TaskScheduler extends TaskRunner {
             tasks,
         });
 
-        this.sendStatus('Pipeline scheduled');
+        pipeline.status = 'SCHEDULED';
+        this.savePipeline(pipeline);
 
         if (!this.busy) {
             this.nextTask();
@@ -53,7 +54,7 @@ export class TaskScheduler extends TaskRunner {
 
             if (this.pipelines[0].tasks.length === 0) {
                 const completePipeline = this.pipelines.splice(0, 1)[0];
-                const pipeline: PipelinesDto = completePipeline as PipelinesDto;
+                const pipeline: PipelinesDto = completePipeline.pipeline as PipelinesDto;
                 pipeline.runTime = completePipeline.time;
                 pipeline.status = 'COMPLETE';
                 this.savePipeline(pipeline);
