@@ -7,5 +7,6 @@ export class PipelinesDto {
   readonly userId: string;
   readonly name: string;
   readonly user: object;
-  readonly runTime: number;
+  runTime: number;
+  status: string;
 }

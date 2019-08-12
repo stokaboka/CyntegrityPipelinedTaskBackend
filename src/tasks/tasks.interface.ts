@@ -9,4 +9,5 @@ export interface Tasks extends Document {
   readonly user: object;
   readonly name: string;
   readonly averageTime: number;
+  readonly status: string;
 }

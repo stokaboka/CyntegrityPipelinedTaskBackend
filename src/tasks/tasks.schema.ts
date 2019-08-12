@@ -9,4 +9,5 @@ export const TasksSchema = new mongoose.Schema({
     user: Object,
     name: String,
     averageTime: Number,
+    status: String,
 });

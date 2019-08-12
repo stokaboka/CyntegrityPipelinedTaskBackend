@@ -8,4 +8,5 @@ export class TasksDto {
   readonly user: object;
   readonly name: string;
   readonly averageTime: number;
+  status: string;
 }

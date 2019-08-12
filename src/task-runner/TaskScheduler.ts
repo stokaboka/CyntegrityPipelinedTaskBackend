@@ -4,46 +4,46 @@
 
 import {TaskRunner} from './TaskRunner';
 import {spawn} from 'child_process';
+import {PipelinesDto} from '../pipelines/pipelines.dto';
+import {TasksDto} from '../tasks/tasks.dto';
 
 export class TaskScheduler extends TaskRunner {
 
-    async addPipeline(pipeline: any = null) {
+    async addPipeline(pipeline: PipelinesDto = null) {
         const { _id: pipelineId } = pipeline;
         const pipelineTasks = await this.pipelineTasksService.find({pipelineId});
-        const tasks = pipelineTasks.map( e => {
-            // @ts-ignore
-            const {_id, name, averageTime} = e.task;
-            return {_id, name, averageTime};
-        });
-        // tslint:disable-next-line:no-console
-        // console.log(tasks);
+        const tasks = pipelineTasks.map( e => e.task );
+
         this.pipelines.push({
             pipeline,
             time: 0,
             tasks,
         });
 
-        // tslint:disable-next-line:no-console
-        // console.log(this.pipelines);
+        this.sendStatus('Pipeline scheduled');
 
-        if (this.busy) {
-            this.sendStatus('Pipeline scheduled');
-        } else {
+        if (!this.busy) {
             this.nextTask();
         }
     }
 
-    startTask(task: any) {
+    taskStarted(task: TasksDto) {
         this.busy = true;
         // tslint:disable-next-line:no-console
-        console.log(`startTask ${task.name}`);
-        this.sendStatus(`Start Task ${task.name}`);
+        console.log(`taskStarted ${task.name}`);
+        task.status = 'STARTED';
+        this.saveTask(task);
+        this.sendStatus('Task Started', task);
     }
 
-    endTask(task: any, data: any = null) {
+    endTask(task: TasksDto, data: any = null) {
         this.busy = false;
         // tslint:disable-next-line:no-console
         console.log(`endTask ${task.name}`);
+
+        task.status = 'COMPLETE';
+        this.saveTask(task);
+        this.sendStatus('End Task', task);
 
         if (this.pipelines.length > 0) {
             // seconds
@@ -54,15 +54,15 @@ export class TaskScheduler extends TaskRunner {
             }
 
             if (this.pipelines[0].tasks.length === 0) {
-                const {pipeline} = this.pipelines[0];
-                pipeline.runTime = this.pipelines[0].time;
-                this.savePipelineRunTime(pipeline);
-                this.pipelines.splice(0, 1);
+                const completePipeline = this.pipelines.splice(0, 1)[0];
+                const pipeline: PipelinesDto = completePipeline as PipelinesDto;
+                pipeline.runTime = completePipeline.time;
+                pipeline.status = 'COMPLETE';
+                this.savePipeline(pipeline);
             }
         }
 
         this.nextTask();
-        this.sendStatus(`End Task ${task.name}`);
     }
 
     async nextTask() {
@@ -78,7 +78,7 @@ export class TaskScheduler extends TaskRunner {
         }
     }
 
-    runTask(task: any): Promise<any> {
+    runTask(task: TasksDto): Promise<any> {
         if (this.busy) {
             return Promise.reject();
         }
@@ -97,7 +97,7 @@ export class TaskScheduler extends TaskRunner {
             const delta = (task.averageTime / 5) * Math.sign(Math.random() - 0.5);
             const time = task.averageTime + delta;
             const ls = spawn('./sleep.sh', [`${task.name}`, `${task._id}`, `${time}s`]);
-            this.startTask(task);
+            this.taskStarted(task);
 
             ls.stdout.on('data', (data) => {
                 // tslint:disable-next-line:no-console

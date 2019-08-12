@@ -9,5 +9,6 @@ export const PipelinesSchema = new mongoose.Schema({
     userId: String,
     name: String,
     user: Object,
-    runTime: Number
+    runTime: Number,
+    status: String,
 });

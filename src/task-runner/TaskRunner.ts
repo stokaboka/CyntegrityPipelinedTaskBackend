@@ -7,6 +7,7 @@ import {PipelinesDto} from '../pipelines/pipelines.dto';
 import {TasksService} from '../tasks/tasks.service';
 import {PipelinesService} from '../pipelines/pipelines.service';
 import {PipelineTasksService} from '../pipeline-tasks/pipeline-tasks.service';
+import {TasksDto} from '../tasks/tasks.dto';
 
 export class TaskRunner {
     protected pipelines: any[] = [];
@@ -30,7 +31,7 @@ export class TaskRunner {
         this.pipelineTasksService = pipelineTasksService;
     }
 
-    getStatus(message: string, pipeline: PipelinesDto = null): any {
+    getStatus(message: string, updated: any = null): any {
         const {busy, pipelines} = this;
         const out = {
             busy,
@@ -40,22 +41,30 @@ export class TaskRunner {
                 task: pipelines.length > 0 && pipelines[0].tasks.length > 0 ?  pipelines[0].tasks[0]._id : null,
             },
             scheduled: pipelines.length > 1 ? pipelines.filter((e, i) => i > 0).map(e => e.pipeline._id) : null,
-            updated: pipeline,
+            updated,
         };
         return out;
     }
 
-    sendStatus(message: string, pipeline: PipelinesDto = null) {
-        const status = this.getStatus(message, pipeline);
+    sendStatus(message: string, data: any = null) {
+        const status = this.getStatus(message, data);
         // tslint:disable-next-line:no-console
         console.log('sendStatus');
         this.gateway.emit('task-runner-status', status);
     }
 
-    async savePipelineRunTime(pipeline: PipelinesDto) {
+    async savePipeline(pipelineInfo: any) {
         // tslint:disable-next-line:no-console
-        console.log(`savePipelineRunTime ${pipeline.name} ${pipeline.runTime}`);
-        await this.pipelinesService.save(pipeline);
-        this.sendStatus('Pipeline updated', pipeline);
+        console.log(`savePipelineRunTime ${pipelineInfo.pipeline.name} ${pipelineInfo.status} ${pipelineInfo.runTime}`);
+        await this.pipelinesService.save(pipelineInfo.pipeline);
+        this.sendStatus('Pipeline updated', pipelineInfo.pipeline);
     }
+
+    async saveTask(task: TasksDto) {
+        // tslint:disable-next-line:no-console
+        console.log(`saveTask ${task.name}`);
+        await this.tasksService.save(task);
+        this.sendStatus('Task updated', task);
+    }
+
 }

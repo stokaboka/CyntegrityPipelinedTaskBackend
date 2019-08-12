@@ -9,4 +9,5 @@ export interface Pipelines extends Document {
   readonly name: string;
   readonly user: object;
   readonly runTime: number;
+  readonly status: string;
 }
