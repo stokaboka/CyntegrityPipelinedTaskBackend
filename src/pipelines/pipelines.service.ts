@@ -52,6 +52,10 @@ export class PipelinesService {
 
   /**
    * idea from https://www.compose.com/articles/mongo-metrics-finding-a-happy-median/
+   * but there is an error in the algorithm proposed in the article. For an odd sequence, the calculation is incorrect
+   *
+   * algorithm fixed
+   *
    * @param params
    */
   async median(): Promise<any> {
@@ -88,10 +92,14 @@ export class PipelinesService {
           count: 1,
           values: 1,
           midpoint: 1,
-          high: 1,
+          h: '$high',
+          l: '$low',
+          high: {
+            $cond: { if: { $eq: [ '$high', '$low' ] }, then: '$high', else: { $subtract: ['$high', 1] } },
+          },
           low: {
-                $cond: { if: { $eq: [ '$high', '$low' ] }, then: { $subtract: ['$low', 1] }, else: '$low' },
-              },
+            $cond: {if: {$eq: ['$high', '$low']}, then: {$subtract: ['$low', 1]}, else: '$low'},
+          },
         },
       },
 
@@ -107,6 +115,8 @@ export class PipelinesService {
       {
         $project: {
           values: 1,
+          high: 1,
+          low: 1,
           beginValue: { $arrayElemAt: ['$values', '$high'] },
           endValue: { $arrayElemAt: ['$values', '$low'] },
         },
@@ -114,6 +124,8 @@ export class PipelinesService {
 
      { $project: {
          values: 1,
+         high: 1,
+         low: 1,
        median: { $avg: ['$beginValue', '$endValue'] } },
      },
 
